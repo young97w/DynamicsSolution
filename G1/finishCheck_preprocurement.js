@@ -20,14 +20,7 @@ function start(GUID) {
 function getRequirement(reqId,GUID) {
     Xrm.WebApi.online.retrieveMultipleRecords("gppr2p_procurementrequest", "?$select=gppr2p_srmprocurementrequestid&$filter=_regardingobjectid_value eq " + reqId).then(
         function success(results) {
-            var flag = true;
-            for (var i = 0; i < results.entities.length; i++) {
-                var srmid = results.entities[i]["gppr2p_srmprocurementrequestid"];
-                if(srmid == null){
-                    flag = false;
-                }
-            }
-            if(flag){
+            if(results.entities.length > 0){
                 finish(GUID);
             }else{
                 Xrm.Utility.alertDialog("请生成采购申请！");
