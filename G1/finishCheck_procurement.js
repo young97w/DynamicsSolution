@@ -25,6 +25,7 @@ function finish(GUID) {
     Xrm.WebApi.online.updateRecord("gppr2p_procurementrequest", GUID, entity).then(
         function success(result) {
             var updatedEntityId = result.id;
+            Xrm.Page.data.refresh();
         },
         function(error) {
             Xrm.Utility.alertDialog(error.message);

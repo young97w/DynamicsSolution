@@ -42,6 +42,7 @@ function finish(GUID){
     Xrm.WebApi.online.updateRecord("cr74e_commoditycodingtask", GUID, entity).then(
         function success(result) {
             var updatedEntityId = result.id;
+            Xrm.Page.data.refresh();
         },
         function(error) {
             Xrm.Utility.alertDialog(error.message);
