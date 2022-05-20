@@ -1,5 +1,6 @@
 function start(GUID) {
     debugger
+    Xrm.Page.data.save();
     Xrm.WebApi.online.retrieveRecord("cr74e_commoditycodingtask", GUID, "?$select=_regardingobjectid_value").then(
         function success(result) {
             var reqId = result["_regardingobjectid_value"];
@@ -13,7 +14,7 @@ function start(GUID) {
 
 //获取关联产品
 function getProducts(GUID,reqId) {
-    Xrm.WebApi.online.retrieveMultipleRecords("gppr2p_product", "?$select=gppr2p_b2bproductcode,gppr2p_b2bproductname&$filter=_gppr2p_requirement_value eq "+reqId).then(
+    Xrm.WebApi.online.retrieveMultipleRecords("gppr2p_product", "?$select=gppr2p_b2bproductcode,gppr2p_b2bproductname&$filter=statecode eq 1 and _gppr2p_requirement_value eq "+reqId).then(
         function success(results) {
             var flag = true;
             for (var i = 0; i < results.entities.length; i++) {

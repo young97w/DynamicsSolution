@@ -1,11 +1,12 @@
 function start(GUID) {
     debugger
+    Xrm.Page.data.save();
     Xrm.WebApi.online.retrieveRecord("gppr2p_prodonlinenotification", GUID, "?$select=gppr2p_onlinetime").then(
         function success(result) {
             var gppr2p_onlinetime = result["gppr2p_onlinetime"];
             //产品完成时间为空则提醒
             if(gppr2p_onlinetime == null){
-                Xrm.Utility.alertDialog("请填写产品完成时间！");
+                Xrm.Utility.alertDialog("请填写产品上线时间！");
             }else{
                 //不为空，完成任务
                 var entity = {};

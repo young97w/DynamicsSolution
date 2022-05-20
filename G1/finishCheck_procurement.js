@@ -1,5 +1,6 @@
 function start(GUID) {
     debugger
+    Xrm.Page.data.save();
     Xrm.WebApi.online.retrieveRecord("gppr2p_procurementrequest", GUID, "?$select=gppr2p_agreementcompletedon,gppr2p_agreementstarton,gppr2p_quotaionstarton,gppr2p_quotationcompletedon").then(
         function success(result) {
             var agreementcompletedon = result["gppr2p_agreementcompletedon"];
