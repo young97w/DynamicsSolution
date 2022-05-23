@@ -1,12 +1,17 @@
 function start(GUID) {
     debugger
-    Xrm.Page.data.save();
-    Xrm.WebApi.online.retrieveRecord("cr74e_commoditycodingtask", GUID, "?$select=_regardingobjectid_value").then(
-        function success(result) {
-            var reqId = result["_regardingobjectid_value"];
-            getProducts(GUID,reqId);
-        },
-        function(error) {
+    Xrm.Page.data.save().then(
+        function(success){
+            Xrm.WebApi.online.retrieveRecord("cr74e_commoditycodingtask", GUID, "?$select=_regardingobjectid_value").then(
+                function success(result) {
+                    var reqId = result["_regardingobjectid_value"];
+                    getProducts(GUID,reqId);
+                },
+                function(error) {
+                    Xrm.Utility.alertDialog(error.message);
+                }
+            );
+        },function(error){
             Xrm.Utility.alertDialog(error.message);
         }
     );

@@ -1,22 +1,26 @@
 function start(GUID) {
     debugger
-    Xrm.Page.data.save();
-    Xrm.WebApi.online.retrieveRecord("gppr2p_preprocurementtask", GUID, "?$select=gppr2p_isbiddingsampleaudittaskfinished,gppr2p_bidfinishdate,_regardingobjectid_value").then(
-        function success(result) {
-            var biddingfinish = result["gppr2p_isbiddingsampleaudittaskfinished"];
-            var reqId = result["_regardingobjectid_value"];
-            var bidfinishdate = result['gppr2p_bidfinishdate']
-            if(bidfinishdate != null && biddingfinish != null && biddingfinish == true){
-                getRequirement(reqId,GUID);
-            }else{
-                Xrm.Utility.alertDialog("请将招标样审核结束选择为“是”,并填写招标样审核完成时间！");
-            }
-        },
-        function(error) {
+    Xrm.Page.data.save().then(
+        function(success){
+            Xrm.WebApi.online.retrieveRecord("gppr2p_preprocurementtask", GUID, "?$select=gppr2p_isbiddingsampleaudittaskfinished,gppr2p_bidfinishdate,_regardingobjectid_value").then(
+                function success(result) {
+                    var biddingfinish = result["gppr2p_isbiddingsampleaudittaskfinished"];
+                    var reqId = result["_regardingobjectid_value"];
+                    var bidfinishdate = result['gppr2p_bidfinishdate'];
+                    if(bidfinishdate != null && biddingfinish != null && biddingfinish == true){
+                        getRequirement(reqId,GUID);
+                    }else{
+                        Xrm.Utility.alertDialog("请将招标样审核结束选择为“是”,并填写招标样审核完成时间！");
+                    }
+                },
+                function(error) {
+                    Xrm.Utility.alertDialog(error.message);
+                }
+            );
+        },function(error){
             Xrm.Utility.alertDialog(error.message);
         }
     );
-
 }
 
 function getRequirement(reqId,GUID) {
