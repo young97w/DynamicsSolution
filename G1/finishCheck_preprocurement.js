@@ -2,7 +2,7 @@ function start(GUID) {
     debugger
     Xrm.Page.data.save().then(
         function(success){
-            Xrm.WebApi.online.retrieveRecord("gppr2p_preprocurementtask", GUID, "?$select=gppr2p_isbiddingsampleaudittaskfinished,gppr2p_bidfinishdate,_regardingobjectid_value").then(
+            Xrm.WebApi.online.retrieveRecord("gppr2p_preprocurementtask", GUID, "?$select=description,cr74e_demandforbiddingsamplereview,gppr2p_suppliercfmparam,_gppr2p_preprcmowner_value,gppr2p_isbiddingsampleaudittaskfinished,gppr2p_bidfinishdate,_regardingobjectid_value").then(
                 function success(result) {
                     var description = result["description"];//供应商评样结果记录
                     var biddingfinish = result["gppr2p_isbiddingsampleaudittaskfinished"];//候选供应商的样品是否已全部确认
