@@ -88,7 +88,7 @@ function finish(GUID) {
 
 function notEmpty(...parmas) {
     for (e of parmas) {
-        if(e == null){
+        if(e == false || e == null){
             return false
         }
     }
