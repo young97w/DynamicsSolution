@@ -37,6 +37,9 @@ function start(GUID) {
                                 Xrm.Utility.alertDialog("请补充完整以下字段：供应商评样结果记录、候选供应商的样品是否已全部确认、技术标评审完成时间、招采准备负责人");
                             }  
                             break;
+                        case 551130002://仅价格/佣金调整/平移
+                            getRequirement(reqId,GUID);
+                            break;
                         default:
                             Xrm.Utility.alertDialog("请选择评标方案！");
                       }
