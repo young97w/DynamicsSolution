@@ -1,38 +1,35 @@
-var userid
+var accountid
 function start(){  
     debugger
     var lookup= Xrm.Page.getAttribute("gppr2p_account").getValue(); 
-    if (lookup !== null){
-        para = "accounts("+lookup[0].id.slice(1, -1)+")?$select=_gppr2p_systemuser_account__value";
-        var result = retrieve(para);
-        if (result["_gppr2p_systemuser_account__value"] != null) {
-            userid = result["_gppr2p_systemuser_account__value"];
-            Xrm.Page.getControl("gppr2p_contact").addPreSearch(addFilter);
-        }else{
-            userid = "00000000-0000-0000-0000-000000000000";
-            Xrm.Page.getControl("gppr2p_contact").addPreSearch(addFilter);
-        }
+    if (lookup == null){
+        accountid = "00000000-0000-0000-0000-000000000000";
     }else{
-        userid = "00000000-0000-0000-0000-000000000000";
-        Xrm.Page.getControl("gppr2p_contact").addPreSearch(addFilter);
+        accountid = lookup[0].id.slice(1, -1);
     }
+    Xrm.Page.getControl("gppr2p_contact").addPreSearch(addFilter);
 }
     
 
 function addFilter(){
-    var conditionStr = "<condition attribute='new_user' operator='eq' uiname='7天BU#' uitype='systemuser' value='"+userid+"' />";
-    var filterStr = "<filter type='and'>" + conditionStr + "</filter>";
-    Xrm.Page.getControl("gppr2p_contact").addCustomFilter(filterStr, "contact");
-}
-
-function retrieve(parameter) {
-    var req = new XMLHttpRequest();
-    req.open("GET", Xrm.Page.context.getClientUrl() + "/api/data/v9.1/" + parameter, false);
-    req.setRequestHeader("Accept", "application/json");
-    req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-    req.setRequestHeader("OData-MaxVersion", "4.0");
-    req.setRequestHeader("OData-Version", "4.0");
-    req.setRequestHeader("Prefer", "odata.include-annotations=\"*\"");
-    req.send();
-    return JSON.parse(req.responseText);
+  var fetchXML= 
+    "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>"+
+    "<entity name='contact'>"+
+        "<attribute name='fullname' />"+
+        "<attribute name='telephone1' />"+
+        "<attribute name='contactid' />"+
+        "<order attribute='fullname' descending='false' />"+
+        "<link-entity name='gppr2p_account2contact' from='gppr2p_contact' to='contactid' link-type='inner' alias='ab'>"+
+        "<filter type='and'>"+
+            "<condition attribute='gppr2p_account' operator='eq' uiname='test-杨远' uitype='account' value='"+accountid+"' />"+
+        "</filter>"+
+        "</link-entity>"+
+    "</entity>"+
+    "</fetch>";
+    var layoutXml = "<grid name='resultSet' object='10024' jump='name' select='1' icon='1' preview='1'>" +
+    "<row name='result' id='contactid'>" +
+    "<cell name='fullname' width='300' />" +
+    "</row></grid>";
+    
+    Xrm.Page.getControl("gppr2p_contact").addCustomView("00000000-0000-0000-00aa-000010001004", "contact", "可用联系人", fetchXML, layoutXml, true);
 }
